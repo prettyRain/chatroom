@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
+    <style>
+        * {margin:0;padding:0}
+        body,html{
+            width:100%;
+            height:100%;
+            overflow:hidden;
+        }
+        div {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            margin:0 auto;
+        }
+        .top {
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            text-align:center;
+            font-size:30px;
+            font-weight:400;
+            color: white;
+            background: #73accc;
+        }
+        .content {
+            width:100%;
+            padding:40px 20px;
+            height:100%;
+            overflow: auto;
+        }
+        .content div{
+            padding-bottom:5px;
+            border-bottom:1px dashed #c4ccc9;
+        }
+        .content div:last-child {
+            padding:0;
+            border-width:0;
+        }
+        .floor {
+            padding:5px  5px 5px 5px;
+            position:fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            height:30px;
+            background-color:#73accc;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+        }
+        .floor span{
+            font-size:14px;
+            line-height:20px;
+            margin-top:0px;
+            text-align:center;
+        }
+        span:nth-child(1){
+            flex:1;
+        }
+        span:nth-child(2){
+            flex:5;
+        }
+        span input {
+            box-sizing:border-box;
+            margin:0;
+            padding-left:5px;
+            display:inline-block;
+            width:100%;
+            height:100%;
+            border-radius:10px;
+            border-width:0;
+            outline:none;
+        }
+        span:nth-child(3){
+            cursor:pointer;
+            flex:1;
+        }
+        h5 {
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" name="username" value="<%=username%>" class="userClz">
+<div class="top">小小聊天室</div>
+<div class="content">
+    <div>
+        <h5>
+            <%=username%>,欢迎您
+        </h5>
+    </div>
+</div>
+<div class="floor"><span>消息：</span><span><input type="text" class="contentClz"/></span><span class="fasong">发送</span></div>
+</body>
+</html>
+//关键步骤引入socket.io.js
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+    var socket = io();
+    var content = document.querySelector(".content");
+    var elespan = document.querySelector(".fasong");
+    var input = document.querySelector(".contentClz");
+    elespan.addEventListener("click",function(e){
+        console.log(33);
+        if(!!input.value){
+            socket.emit("shuru",{username:document.querySelector(".userClz").value,content:input.value});
+        }
+
+    })
+    socket.on("shuchu",function(msg){
+        var elediv = document.createElement("div");
+        elediv.innerHTML = msg;
+        content.appendChild(elediv);
+    })
+</script>
